@@ -13,16 +13,16 @@ public class Connect4Main {
         Connect4AI ai = new Connect4AI();
         System.out.println("Welcome to Connect 4!");
         System.out.println("Do you want to play against a human or AI?");
-        System.out.println("Enter 1 for human or 2 for AI");
+        System.out.print("Enter 1 for human or 2 for AI: ");
         int opponent = input.nextInt();
         while (opponent != 1 && opponent != 2) {
-            System.out.println("Invalid input. Enter 1 for human or 2 for AI");
+            System.out.print("Invalid input. Enter 1 for human or 2 for AI: ");
             opponent = input.nextInt();
         }
-        System.out.println("Enter 1 to go first or 2 to go second");
+        System.out.print("Enter 1 to go first or 2 to go second: ");
         int player = input.nextInt();
         while (player != 1 && player != 2) {
-            System.out.println("Invalid input. Enter 1 to go first or 2 to go second");
+            System.out.print("Invalid input. Enter 1 to go first or 2 to go second: ");
             player = input.nextInt();
         }
         if (player == 2) {
@@ -30,10 +30,10 @@ public class Connect4Main {
             board.printBoard();
         }
         while (true) {
-            System.out.println("Enter a column to drop your piece");
+            System.out.print("Enter a column to drop your piece (1-7): ");
             int column = input.nextInt();
             while (!board.dropPiece(column, 1)) {
-                System.out.println("Invalid input. Enter a column to drop your piece");
+                System.out.print("Invalid input. Enter a column to drop your piece (1-7): ");
                 column = input.nextInt();
             }
             board.printBoard();
@@ -45,10 +45,10 @@ public class Connect4Main {
                 break;
             }
             if (opponent == 1) {
-                System.out.println("Enter a column to drop your piece");
+                System.out.print("Enter a column to drop your piece (1-7): ");
                 column = input.nextInt();
                 while (!board.dropPiece(column, 2)) {
-                    System.out.println("Invalid input. Enter a column to drop your piece");
+                    System.out.print("Invalid input. Enter a column to drop your piece (1-7): ");
                     column = input.nextInt();
                 }
                 board.printBoard();
