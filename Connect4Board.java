@@ -19,6 +19,7 @@ public class Connect4Board {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     public boolean dropPiece(int column, int player) {
