@@ -1,4 +1,3 @@
-
 // Path: Connect4Board.java
 
 public class Connect4Board {
