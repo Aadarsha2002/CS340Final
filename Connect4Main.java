@@ -6,11 +6,13 @@
 
 import java.util.Scanner;
 
+import javax.lang.model.util.ElementScanner14;
+
 public class Connect4Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         Connect4Board board = new Connect4Board();
-        Connect4AI ai = new Connect4AI();
+        Connect4AI ai = new Connect4AI(0);
         // intro
         System.out.println("Welcome to Connect 4!");
         // ask if user wants to play against human or ai
@@ -33,7 +35,22 @@ public class Connect4Main {
         }
         // if user chose to go second make a move with the AI
         if (player == 2) {
-            board.dropPiece(ai.getMove(board), 2);
+            //ask what version of AI they want to play against
+            System.out.println("Do you want to play against the minimax AI or the alpha-beta AI?");
+            System.out.print("Enter 1 for minimax or 2 for alpha-beta: ");
+            int aiType = input.nextInt();
+            // make sure valid input
+            while (aiType != 1 && aiType != 2) {
+                System.out.print("Invalid input. Enter 1 for minimax or 2 for alpha-beta: ");
+                aiType = input.nextInt();
+            }
+            // create AI object
+            ai = new Connect4AI(aiType);
+            // make move
+            int aiMove = ai.getMove(board);
+            // drop piece
+            board.dropPiece(aiMove, 1);
+            // print board
             board.printBoard();
         }
 
