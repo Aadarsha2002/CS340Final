@@ -6,8 +6,6 @@
 
 import java.util.Scanner;
 
-import javax.lang.model.util.ElementScanner14;
-
 public class Connect4Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
@@ -25,6 +23,19 @@ public class Connect4Main {
             System.out.print("Invalid input. Enter 1 for human or 2 for AI: ");
             opponent = input.nextInt();
         }
+
+        // if user wants to play against AI, ask what type of AI
+        if (opponent == 2) {
+            System.out.print("Enter 1 for minimax AI or 2 for alpha-beta pruning AI: ");
+            int aiType = input.nextInt();
+            // make sure valid input
+            while (aiType != 1 && aiType != 2) {
+                System.out.print("Invalid input. Enter 1 for minimax AI or 2 for alpha-beta pruning AI: ");
+                aiType = input.nextInt();
+            }
+            ai = new Connect4AI(aiType);
+        }
+
         // ask user if they want to go first or second
         System.out.print("Enter 1 to go first or 2 to go second: ");
         int player = input.nextInt();
@@ -33,19 +44,9 @@ public class Connect4Main {
             System.out.print("Invalid input. Enter 1 to go first or 2 to go second: ");
             player = input.nextInt();
         }
+
         // if user chose to go second make a move with the AI
         if (player == 2) {
-            //ask what version of AI they want to play against
-            System.out.println("Do you want to play against the minimax AI or the alpha-beta AI?");
-            System.out.print("Enter 1 for minimax or 2 for alpha-beta: ");
-            int aiType = input.nextInt();
-            // make sure valid input
-            while (aiType != 1 && aiType != 2) {
-                System.out.print("Invalid input. Enter 1 for minimax or 2 for alpha-beta: ");
-                aiType = input.nextInt();
-            }
-            // create AI object
-            ai = new Connect4AI(aiType);
             // make move
             int aiMove = ai.getMove(board);
             // drop piece
