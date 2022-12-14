@@ -61,7 +61,7 @@ public class Connect4 {
   // This method is called during the AI opponent's turn
   private static void aiTurn() {
     // Use the minimax algorithm to find the best move for the AI opponent
-    int col = minimax(2, 'A')[0];
+    int col = minimax(5, 'A')[0];
 
     // Place the piece in the selected column
     placePiece(col, 'A');
