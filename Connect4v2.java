@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Connect4 {
+public class Connect4v2 {
 
   static Scanner scanner = new Scanner(System.in);
 
@@ -59,7 +59,7 @@ public class Connect4 {
   // This method is called during the AI opponent's turn
   private static void aiTurn() {
     // Use the minimax algorithm to find the best move for the AI opponent
-    int col = minimax(dth, 'A')[0];
+    int col = minimax(dth, 'A', Integer.MIN_VALUE, Integer.MAX_VALUE)[0];
 
     // Place the piece in the selected column
     placePiece(col, 'A');
@@ -70,7 +70,7 @@ public class Connect4 {
 
   // This method implements the minimax algorithm to find the best move for the AI
   // opponent
-  private static int[] minimax(int depth, char player) {
+  private static int[] minimax(int depth, char player, int alpha, int beta) {
 
     // Generate a list of all possible moves
     List<Integer> moves = getMoves();
@@ -91,7 +91,7 @@ public class Connect4 {
       placePiece(col, player);
 
       // Calculate the score for this move
-      int score = minimax(depth - 1, player == 'A' ? 'H' : 'A')[1];
+      int score = minimax(depth - 1, player == 'A' ? 'H' : 'A', alpha, beta)[1];
 
       // print the score and the Move
       System.out.println("Score: " + score + " Move: " + col);
@@ -104,6 +104,15 @@ public class Connect4 {
       if (score < bestScore) {
         bestScore = score;
         bestCol = col;
+      }
+
+      // Alpha-beta pruning
+      if (bestScore <= alpha) {
+        return new int[] { bestCol, bestScore };
+      }
+
+      if (bestScore < beta) {
+        beta = bestScore;
       }
     }
 
