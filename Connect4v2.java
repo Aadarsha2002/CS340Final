@@ -25,17 +25,16 @@ public class Connect4v2 {
     // Start the game by printing the initial board state
     printBoard();
 
-    Scanner scanner = new Scanner(System.in);
     System.out.println("Do you want to play against another human (Y/N)?");
     String response = scanner.nextLine();
-    boolean againstHuman = response.toLowerCase().equals("y");
+    boolean againstHuman = response.equalsIgnoreCase("y");
 
     // If the user doesn't want to play against another human, ask whether they want
     // to go first
     if (!againstHuman) {
       System.out.println("Do you want to go first (Y/N)?");
       response = scanner.nextLine();
-      boolean humanGoesFirst = response.toLowerCase().equals("y");
+      boolean humanGoesFirst = response.equalsIgnoreCase("y");
 
       // If the human doesn't want to go first, let the AI go first
       if (!humanGoesFirst) {
@@ -190,10 +189,21 @@ public class Connect4v2 {
     return new int[] { bestCol, bestScore };
   }
 
-  // This method prints the current state of the game board
   private static void printBoard() {
+    // Print the column numbers
+    System.out.print(" _");
+    for (int i = 0; i < COLS; i++) {
+      System.out.print("|" + (i + 1));
+    }
+    System.out.println("|");
+
+    // Print the game board
     for (int i = 0; i < ROWS; i++) {
       for (int j = 0; j < COLS; j++) {
+        if (j == 0) {
+          // Print the row number
+          System.out.print("|" + (i + 1));
+        }
         System.out.print("|" + board[i][j]);
       }
       System.out.println("|");
