@@ -8,7 +8,7 @@ public class Connect4v2 {
 
   // The game board is represented as a 2-dimensional array
   // with 6 rows and 7 columns
-  private static int dth = 3;
+  private static int dth = 5;
 
   private static final int ROWS = 6;
   private static final int COLS = 7;
@@ -291,6 +291,12 @@ public class Connect4v2 {
   // This method calculates the score for the current state of the game board
   private static int evaluate() {
     int score = 0;
+
+    if (hasWon('A')) {
+      return -1000;
+    } else if (hasWon('H')) {
+      return 1000;
+    }
 
     // Loop through each cell on the game board
     for (int i = 0; i < ROWS; i++) {
