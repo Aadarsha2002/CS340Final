@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Connect4v2 {
+public class Connect4v3 {
 
   static Scanner scanner = new Scanner(System.in);
 
@@ -25,72 +25,23 @@ public class Connect4v2 {
     // Start the game by printing the initial board state
     printBoard();
 
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Do you want to play against another human (Y/N)?");
-    String response = scanner.nextLine();
-    boolean againstHuman = response.toLowerCase().equals("y");
-
-    // If the user doesn't want to play against another human, ask whether they want
-    // to go first
-    if (!againstHuman) {
-      System.out.println("Do you want to go first (Y/N)?");
-      response = scanner.nextLine();
-      boolean humanGoesFirst = response.toLowerCase().equals("y");
-
-      // If the human doesn't want to go first, let the AI go first
-      if (!humanGoesFirst) {
-
-        aiTurn();
-      }
-    }
-
     // The game is played by alternating turns between the human
     // player and the AI opponent
-    char currentPlayer = againstHuman ? '1' : 'H';
     while (true) {
-      if (currentPlayer == '1') {
-        // Human player 1's turn
-        humanTurn(1);
+      // Human player's turn
+      humanTurn();
 
-        // Check if the game is over
-        if (isGameOver()) {
-          break;
-        }
+      // Check if the game is over
+      if (isGameOver()) {
+        break;
+      }
 
-        // Switch to the other player's turn
-        currentPlayer = '2';
-      } else if (currentPlayer == '2') {
-        // Human player 2's turn
-        humanTurn(2);
+      // AI opponent's turn
+      aiTurn();
 
-        // Check if the game is over
-        if (isGameOver()) {
-          break;
-        }
-
-        // Switch to the other player's turn
-        currentPlayer = '1';
-      } else if (currentPlayer == 'H') {
-        // Human player's turn
-        humanTurn();
-
-        // Check if the game is over
-        if (isGameOver()) {
-          break;
-        }
-
-        // If the user is playing against another human, skip the AI opponent's turn
-        if (againstHuman) {
-          continue;
-        }
-
-        // AI opponent's turn
-        aiTurn();
-
-        // Check if the game is over
-        if (isGameOver()) {
-          break;
-        }
+      // Check if the game is over
+      if (isGameOver()) {
+        break;
       }
     }
   }
@@ -103,23 +54,6 @@ public class Connect4v2 {
 
     // Place the piece in the selected column
     placePiece(col, 'H');
-
-    // Print the updated board
-    printBoard();
-  }
-
-  // This method is called during the human player's turn when playing against
-  // another human
-  private static void humanTurn(int player) {
-    // Prompt the player to enter a column where they want to place their piece
-    System.out.println("Player " + player + ", enter a column (1-7): ");
-    int col = scanner.nextInt();
-
-    // Place the piece in the selected column
-    placePiece(col, (char) (player + '0'));
-
-    // Print the updated board
-    printBoard();
   }
 
   // This method is called during the AI opponent's turn
@@ -149,11 +83,6 @@ public class Connect4v2 {
     int bestScore = Integer.MAX_VALUE;
     int bestCol = -1;
 
-    // The human player is minimizing, so initialize the best score to a high value
-    if (player == 'H') {
-      bestScore = Integer.MAX_VALUE;
-    }
-
     int[] scores = new int[7];
 
     // Loop through all possible moves
@@ -165,7 +94,7 @@ public class Connect4v2 {
       int score = minimax(depth - 1, player == 'A' ? 'H' : 'A', alpha, beta)[1];
 
       // print the score and the Move
-      // System.out.println("Score: " + score + " Move: " + col);
+      System.out.println("Score: " + score + " Move: " + col);
 
       scores[col - 1] = score;
       // Remove the piece from the column
@@ -203,18 +132,6 @@ public class Connect4v2 {
 
   // This method returns true if the game is over, false otherwise
   private static boolean isGameOver() {
-    // Check if player 1 has won
-    if (hasWon('1')) {
-      System.out.println("Player 1 has won!");
-      return true;
-    }
-
-    // Check if player 2 has won
-    if (hasWon('2')) {
-      System.out.println("Player 2 has won!");
-      return true;
-    }
-
     // Check if the human player has won
     if (hasWon('H')) {
       System.out.println("Human player has won!");
@@ -239,11 +156,6 @@ public class Connect4v2 {
 
   // This method places a piece on the game board
   private static void placePiece(int col, char player) {
-    // Check if the selected column is valid
-    if (col < 1 || col > COLS) {
-      System.out.println("Invalid column!");
-      return;
-    }
     // Check if the selected column is full
     if (board[0][col - 1] != ' ') {
       System.out.println("Column is full!");
