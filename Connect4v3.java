@@ -8,7 +8,7 @@ public class Connect4v3 {
 
   // The game board is represented as a 2-dimensional array
   // with 6 rows and 7 columns
-  private static int dth = 10;
+  private static int dth = 5;
 
   private static final int ROWS = 6;
   private static final int COLS = 7;
