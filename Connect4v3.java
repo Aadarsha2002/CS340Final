@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Connect4v2 {
+public class Connect4v3 {
 
   static Scanner scanner = new Scanner(System.in);
 
   // The game board is represented as a 2-dimensional array
   // with 6 rows and 7 columns
-  private static int dth = 3;
+  private static int dth = 10;
 
   private static final int ROWS = 6;
   private static final int COLS = 7;
@@ -124,7 +124,7 @@ public class Connect4v2 {
   // This method is called during the AI opponent's turn
   private static void aiTurn() {
     // Use the minimax algorithm to find the best move for the AI opponent
-    int col = minimax(dth, 'A', Integer.MIN_VALUE, Integer.MAX_VALUE)[0];
+    int col = getBestMove(dth);
 
     // Place the piece in the selected column
     placePiece(col, 'A');
@@ -133,60 +133,55 @@ public class Connect4v2 {
     printBoard();
   }
 
-  // This method implements the minimax algorithm to find the best move for the AI
-  // opponent
-  private static int[] minimax(int depth, char player, int alpha, int beta) {
-
-    // Generate a list of all possible moves
-    List<Integer> moves = getMoves();
-
-    if (depth == 0 || hasWon(player == 'A' ? 'H' : 'A') || hasWon(player == 'A' ? 'A' : 'H') || moves.isEmpty()) {
-      return new int[] { -1, evaluate() };
-    }
-
-    // The AI player is maximizing, so initialize the best score to a low value
-    int bestScore = Integer.MAX_VALUE; // change this
+  public static int getBestMove(int depth) {
+    int bestScore = Integer.MIN_VALUE;
     int bestCol = -1;
-
-    // The human player is minimizing, so initialize the best score to a high value
-    if (player == 'H') {
-      bestScore = Integer.MAX_VALUE;
-    }
-
-    int[] scores = new int[7];
-
-    // Loop through all possible moves
-    for (int col : moves) {
-      // Place the piece in the selected column
-      placePiece(col, player);
-
-      // Calculate the score for this move
-      int score = minimax(depth - 1, player == 'A' ? 'H' : 'A', alpha, beta)[1];
-
-      // print the score and the Move
-      // System.out.println("Score: " + score + " Move: " + col);
-
-      scores[col - 1] = score;
-      // Remove the piece from the column
+    for (int col : getMoves()) {
+      placePiece(col, 'A');
+      int score = minimize(depth - 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
       removePiece(col);
-
-      // Update the best score and column if necessary
-      if (score < bestScore) { // change this for when maximizing or minimizing
+      if (score > bestScore) {
         bestScore = score;
         bestCol = col;
       }
+    }
+    return bestCol;
+  }
 
-      // Alpha-beta pruning
-      if (bestScore <= alpha) {
-        return new int[] { bestCol, bestScore };
-      }
-
-      if (bestScore < beta) {
-        beta = bestScore;
-      }
+  private static int maximize(int depth, int alpha, int beta) {
+    if (depth == 0 || hasWon('H') || hasWon('A') || getMoves().isEmpty()) {
+      return evaluate();
     }
 
-    return new int[] { bestCol, bestScore };
+    int bestScore = Integer.MIN_VALUE;
+    for (int col : getMoves()) {
+      placePiece(col, 'A');
+      bestScore = Math.max(bestScore, minimize(depth - 1, alpha, beta));
+      removePiece(col);
+      if (bestScore >= beta) {
+        return bestScore;
+      }
+      alpha = Math.max(alpha, bestScore);
+    }
+    return bestScore;
+  }
+
+  private static int minimize(int depth, int alpha, int beta) {
+    if (depth == 0 || hasWon('H') || hasWon('A') || getMoves().isEmpty()) {
+      return evaluate();
+    }
+
+    int bestScore = Integer.MAX_VALUE;
+    for (int col : getMoves()) {
+      placePiece(col, 'H');
+      bestScore = Math.min(bestScore, maximize(depth - 1, alpha, beta));
+      removePiece(col);
+      if (bestScore <= alpha) {
+        return bestScore;
+      }
+      beta = Math.min(beta, bestScore);
+    }
+    return bestScore;
   }
 
   private static void printBoard() {
@@ -298,15 +293,14 @@ public class Connect4v2 {
     }
   }
 
-  // This method calculates the score for the current state of the game board
   private static int evaluate() {
-    int score = 0;
-
     if (hasWon('A')) {
-      return -1000;
-    } else if (hasWon('H')) {
       return 1000;
+    } else if (hasWon('H')) {
+      return -1000;
     }
+
+    int score = 0;
 
     // Loop through each cell on the game board
     for (int i = 0; i < ROWS; i++) {
@@ -324,8 +318,11 @@ public class Connect4v2 {
         int d1 = diagonal1(i, j);
         int d2 = diagonal2(i, j);
 
-        // Add the maximum of these scores to the total score
-        score += Math.max(h, Math.max(v, Math.max(d1, d2)));
+        // Add a weighting factor based on the position of the cell
+        int weight = (3 - i) * (3 - j) + (i + 1) * (j + 1);
+
+        // Add the weighted sum of these scores to the total score
+        score += weight * (h + v + d1 + d2);
       }
     }
 
