@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Connect4 {
+public class Connect4 { 
 
   static Scanner scanner = new Scanner(System.in);
 
