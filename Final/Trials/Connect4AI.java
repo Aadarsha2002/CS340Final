@@ -1,3 +1,4 @@
+package Trials;
 // Path: Connect4AI.java
 
 public class Connect4AI {

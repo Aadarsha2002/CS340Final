@@ -1,3 +1,4 @@
+package Trials;
 //a working connect-4 game using a minimal main class and a separate class for the game board and game logic and a separate class for the game AI
 //the game board and game logic class is called Connect4Board
 //the game AI class is called Connect4AI

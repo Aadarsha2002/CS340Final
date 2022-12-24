@@ -1,3 +1,4 @@
+package Trials;
 // Path: Connect4AImm.java
 
 public class Connect4AImm {

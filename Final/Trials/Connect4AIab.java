@@ -1,3 +1,4 @@
+package Trials;
 // Path: Connect4AIab.java
 
 public class Connect4AIab {
